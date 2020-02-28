@@ -1,5 +1,11 @@
-.root {
-    width: 20px;
-    height: 20px;
+.cell_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: solid 1px #000;
+    font: normal normal 12px Arial, sans-serif;
+}
+
+.header {
+    font: normal bold 14px Arial, sans-serif;
 }

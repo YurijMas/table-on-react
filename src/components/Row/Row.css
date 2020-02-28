@@ -1,0 +1,9 @@
+.row_container {
+    display: flex;
+    justify-content: center;
+}
+
+.row_container:hover .cell_container {
+    cursor: pointer;
+    background-color: aqua;
+}

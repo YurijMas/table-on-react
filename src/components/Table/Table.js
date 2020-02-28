@@ -7,9 +7,20 @@ export default class Table extends React.Component {
         this.state = {
             rowsNumber: 0,
         }
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    renderRows() {
+        const {data} = this.props;
+        return data.map((rowData, index) => <Row rowData={rowData} key={`row${index}`}/>);
     }
 
     render() {
-        return <Row/>;
+        return (
+        <div>
+            <Row isHeader={true}/>
+            {this.renderRows()}
+        </div>
+        );
     }
 }

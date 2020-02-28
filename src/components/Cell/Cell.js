@@ -1,13 +1,15 @@
 import React from 'react';
-import styles from './Cell.css';
+import './Cell.css';
 
-export default class Table extends React.Component {
+export default class Cell extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        const {content} = this.props;
-        return <div className={styles.root}></div>;
+        const {content, type, isHeader} = this.props;
+        const additionalStyle = isHeader ? 'header' : '';
+        const styles = 'cell_container ' + additionalStyle;
+        return <div className={styles} style={{width: '200px'}}>{content}</div>;
     }
 }
