@@ -1,4 +1,5 @@
 import React from 'react';
+import './Paginator.css';
 
 export default class Paginator extends React.Component {
     constructor(props) {
@@ -8,25 +9,29 @@ export default class Paginator extends React.Component {
             isForwardActive: false,
         }
         this.renderButtons = this.renderButtons.bind(this);
+        this.onChangePageHandler = this.onChangePageHandler.bind(this);
+    }
+
+    onChangePageHandler() {
+
     }
 
     renderButtons() {
-        const {pageQuantity} = this.props;
-        console.log(pageQuantity);
+        const {pageQuantity, onSelectedPage} = this.props;
         let buttonsArray = [];
         for (let i = 0; i < pageQuantity; i++) {
-            buttonsArray.push(<button key={`ButtonId${i}`}>{i + 1}</button>);
+            buttonsArray.push(<button className={'page_button'} key={`ButtonId${i}`} onClick={onSelectedPage}>{i + 1}</button>);
         }
         return buttonsArray;
     }
 
     render() {
-        const {onSelectNextPage, onSelectPrevPage} = this.props;
+        const {onSelectNextPage, onSelectPrevPage, pageQuantity, selectedPage} = this.props;
         return (
-            <div>
-                <button onClick={onSelectPrevPage}>Back</button>
+            <div className={'paginator_container'}>
+                <button onClick={onSelectPrevPage} disabled={selectedPage === 1}>Back</button>
                 {this.renderButtons()}
-                <button onClick={onSelectNextPage}>Forward</button>
+                <button onClick={onSelectNextPage} disabled={selectedPage === pageQuantity}>Back</button>
             </div>
         );
     }
