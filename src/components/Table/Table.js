@@ -12,8 +12,9 @@ export default class Table extends React.Component {
     }
 
     renderRows() {
-        const {data} = this.props;
-        return data.map((rowData, index) => <Row rowData={rowData} key={`row${index}`}/>);
+        const {data, selectedNewRowHandler, selectedRowIndex} = this.props;
+        return data
+            .map((rowData, index) => <Row rowNumber={index} selectedRowIndex={selectedRowIndex} rowData={rowData} key={`row${index}`} selectedNewRowHandler={selectedNewRowHandler}/>);
     }
 
     render() {

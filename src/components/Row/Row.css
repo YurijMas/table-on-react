@@ -1,4 +1,5 @@
 .row_container {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
@@ -6,4 +7,8 @@
 .row_container:hover .cell_container {
     cursor: pointer;
     background-color: aqua;
+}
+
+.selected_row .cell_container {
+    background-color: red;
 }

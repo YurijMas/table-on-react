@@ -1,0 +1,12 @@
+.line_information_container {
+    width: 40%;
+}
+
+.detail_information_row {
+    display: flex;
+}
+
+.detail_information_cell {
+    width: 50%;
+    font: normal normal 12px Arial, sans-serif;
+}

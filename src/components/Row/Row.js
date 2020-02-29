@@ -5,8 +5,19 @@ import './Row.css';
 export default class Row extends React.Component {
     constructor(props) {
         super(props);
+        const rowNumber = props.rowNumber;
+        this.state = {
+            rowNumber,
+        };
         this.renderHeader = this.renderHeader.bind(this);
         this.renderContentRows = this.renderContentRows.bind(this);
+        this.onSelectedRowHandler = this.onSelectedRowHandler.bind(this);
+    }
+
+    onSelectedRowHandler() {
+        const {rowNumber, selectedNewRowHandler, selectedRowIndex} = this.props;
+        const newSelectedRowIndex = selectedRowIndex === rowNumber ? null : rowNumber;
+        selectedNewRowHandler(newSelectedRowIndex);
     }
 
     renderHeader() {
@@ -22,9 +33,10 @@ export default class Row extends React.Component {
     }
 
     renderContentRows() {
-        const {rowData} = this.props;
+        const {rowData, selectedRowIndex, rowNumber} = this.props;
+        const rowClasses = selectedRowIndex === rowNumber ? 'row_container selected_row' : 'row_container';
         return (
-            <div className='row_container'>
+            <div className={rowClasses} onClick={this.onSelectedRowHandler}>
                 <Cell cellType = 'rowDataid' content={rowData.id}></Cell>
                 <Cell cellType = 'firstName' content={rowData.firstName}></Cell>
                 <Cell cellType = 'lastName' content={rowData.lastName}></Cell>
