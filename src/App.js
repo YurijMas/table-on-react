@@ -2,6 +2,7 @@ import React from 'react';
 import Table from './components/Table/Table';
 import StartMenu from './components/StartMenu/StartMenu'
 import Paginator from './components/Paginator/Paginator'
+import NewRowMenu from './components/NewRowMenu/NewRowMenu'
 import './App.css';
 
 const BIG_LIST = 'http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}';
@@ -17,6 +18,9 @@ class App extends React.Component {
     this.onSelectedPagePrevHandler = this.onSelectedPagePrevHandler.bind(this);
     this.onSelectedPageHandler = this.onSelectedPageHandler.bind(this);
     this.renderLoader = this.renderLoader.bind(this);
+    this.renderMainContent = this.renderMainContent.bind(this);
+    this.renderTable = this.renderTable.bind(this);
+    this.onNewDataHandler = this.onNewDataHandler.bind(this);
     this.state = {
       isStarted: false,
       isPending: false,
@@ -84,6 +88,15 @@ class App extends React.Component {
     });
   }
 
+  onNewDataHandler(data) {
+    const currentData = [...this.state.data];
+    const newData = {...data};
+    currentData.unshift(newData);
+    this.setState({
+      data: currentData,
+    });
+  }
+
   renderLoader() {
     return (
       <div className={'sk-circle'}>
@@ -103,22 +116,37 @@ class App extends React.Component {
     );
   }
 
-  render() {
-    const {data, selectedPage, visibleRows, isPending} = this.state;
-    const pageQuantity = Math.ceil(data.length / STRINGS_ON_PAGE);
-
-    return this.state.isStarted ? (
-      <div className='app_container'>
-          {isPending ? this.renderLoader() : <Table data={data.slice(visibleRows.min, visibleRows.max)}></Table>}
-          <Paginator 
-              pageQuantity={pageQuantity}
-              selectedPage={selectedPage}
-              onSelectNextPage={this.onSelectedPageNextHandler}
-              onSelectPrevPage={this.onSelectedPagePrevHandler}
-              onSelectedPage={this.onSelectedPageHandler}
-          />
+  renderTable() {
+    const {data, visibleRows} = this.state;
+    return (
+      <div className={'table_wrapper'}>
+        <NewRowMenu onNewDataHandler={this.onNewDataHandler}></NewRowMenu>
+        <Table data={data.slice(visibleRows.min, visibleRows.max)}></Table>
       </div>
-     ) :
+    )
+  }
+
+  renderMainContent() {
+    const {data, selectedPage, isPending} = this.state;
+    const pageQuantity = Math.ceil(data.length / STRINGS_ON_PAGE);
+    return (
+      <div className='app_container'>
+          {isPending ? this.renderLoader() : this.renderTable()}
+          <div>
+              <Paginator 
+                pageQuantity={pageQuantity}
+                selectedPage={selectedPage}
+                onSelectNextPage={this.onSelectedPageNextHandler}
+                onSelectPrevPage={this.onSelectedPagePrevHandler}
+                onSelectedPage={this.onSelectedPageHandler}
+              />
+            </div>
+      </div>
+     )
+  }
+
+  render() {
+    return this.state.isStarted ?  this.renderMainContent() :
       <StartMenu onStartButtonHandler={this.onStartButtonHandler}></StartMenu>;
   }
 }

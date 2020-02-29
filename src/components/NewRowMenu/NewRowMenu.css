@@ -1,0 +1,14 @@
+.inputs_container {
+    display: none;
+}
+
+.inputs_container_visible {
+    display: block;
+}
+
+.field_name {
+    display: inline-block;
+    width: 10ch;
+    text-align: left;
+    font: normal bold 14px Arial, sans-serif;
+}

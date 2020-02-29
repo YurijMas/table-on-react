@@ -10,6 +10,6 @@ export default class Cell extends React.Component {
         const {content, type, isHeader} = this.props;
         const additionalStyle = isHeader ? 'header' : '';
         const styles = 'cell_container ' + additionalStyle;
-        return <div className={styles} style={{width: '200px'}}>{content}</div>;
+        return <div className={styles}>{content}</div>;
     }
 }

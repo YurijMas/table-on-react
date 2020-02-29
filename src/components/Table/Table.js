@@ -1,5 +1,6 @@
 import React from 'react';
 import Row from '../Row/Row';
+import './Table.css';
 
 export default class Table extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ export default class Table extends React.Component {
 
     render() {
         return (
-        <div>
+        <div className={'table_container'}>
             <Row isHeader={true}/>
             {this.renderRows()}
         </div>
