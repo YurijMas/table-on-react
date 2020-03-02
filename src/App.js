@@ -3,6 +3,7 @@ import Table from './components/Table/Table';
 import StartMenu from './components/StartMenu/StartMenu';
 import Paginator from './components/Paginator/Paginator';
 import NewRowMenu from './components/NewRowMenu/NewRowMenu';
+import FindMenu from './components//FindMenu/FindMenu';
 import LineInformationContainer from './components/LineInformationContainer/LineInformationContainer';
 import './App.css';
 
@@ -22,11 +23,13 @@ class App extends React.Component {
     this.renderMainContent = this.renderMainContent.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.onNewDataHandler = this.onNewDataHandler.bind(this);
+    this.onFindDataHandler = this.onFindDataHandler.bind(this);
     this.selectedNewRowHandler = this.selectedNewRowHandler.bind(this);
     this.state = {
       isStarted: false,
       isPending: false,
       data: [],
+      filteredData: [],
       selectedPage: 1,
       selectedRowIndex: null,
       visibleRows: {
@@ -40,10 +43,18 @@ class App extends React.Component {
     this.setState({
       isPending: true,
     });
-    const newData = await fetch(BIG_LIST);
-    const json = await newData.json();
+    let newData;
+    let json;
+    try {
+        newData = await fetch(BIG_LIST);
+        json = await newData.json();
+    } catch(e) {
+        json=[];
+        console.log('ERRROR: ', e);
+    }
     this.setState({
       data: json.slice(),
+      filteredData: json.slice(),
     });
     this.setState({
       isPending: false,
@@ -100,6 +111,24 @@ class App extends React.Component {
     });
   }
 
+  onFindDataHandler(text) {
+    const {data} = this.state;
+    const lowerCaseText = text.toLowerCase();
+    if (lowerCaseText === '') {
+      this.setState({
+        filteredData: [...data],
+      });
+      return;
+    }
+    const newFilteredData = data.filter(item => {
+      const strKeys = Object.keys(item);
+      return strKeys.some(key => String(item[key]).toLowerCase().includes(lowerCaseText));
+    });
+    this.setState({
+      filteredData: [...newFilteredData],
+    });
+  }
+
   selectedNewRowHandler(selectedRowIndex) {
     this.setState({
       selectedRowIndex,
@@ -126,27 +155,21 @@ class App extends React.Component {
   }
 
   renderTable() {
-    const {data, visibleRows, selectedRowIndex} = this.state;
+    const {filteredData, visibleRows, selectedRowIndex, selectedPage} = this.state;
+    const pageQuantity = Math.ceil(filteredData.length / STRINGS_ON_PAGE);
     return (
       <div className={'table_wrapper'}>
-        <NewRowMenu onNewDataHandler={this.onNewDataHandler}></NewRowMenu>
+        <div className={'header_menu_container'}>
+            <FindMenu onNewDataHandler={this.onFindDataHandler} onFindDataHandler={this.onFindDataHandler}></FindMenu>
+            <NewRowMenu onNewDataHandler={this.onNewDataHandler}></NewRowMenu>
+        </div>
         <Table 
-            data={data.slice(visibleRows.min, visibleRows.max)} 
+            data={filteredData.slice(visibleRows.min, visibleRows.max)} 
             selectedNewRowHandler={this.selectedNewRowHandler} 
             selectedRowIndex={selectedRowIndex}
         />
-      </div>
-    )
-  }
-
-  renderMainContent() {
-    const {data, selectedPage, isPending, selectedRowIndex} = this.state;
-    const pageQuantity = Math.ceil(data.length / STRINGS_ON_PAGE);
-    return (
-      <div className='app_container'>
-          {isPending ? this.renderLoader() : this.renderTable()}
-          <div>
-              {selectedRowIndex !== null ? <LineInformationContainer data={data[selectedRowIndex]}/> : null}
+        <div>
+              {selectedRowIndex !== null ? <LineInformationContainer data={filteredData[selectedRowIndex]}/> : null}
               <Paginator 
                 pageQuantity={pageQuantity}
                 selectedPage={selectedPage}
@@ -154,7 +177,16 @@ class App extends React.Component {
                 onSelectPrevPage={this.onSelectedPagePrevHandler}
                 onSelectedPage={this.onSelectedPageHandler}
               />
-            </div>
+          </div>
+      </div>
+    )
+  }
+
+  renderMainContent() {
+    const {data, isPending} = this.state;
+    return (
+      <div className='app_container'>
+          {isPending ? this.renderLoader() : this.renderTable()}
       </div>
      )
   }

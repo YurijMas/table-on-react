@@ -12,3 +12,13 @@
     text-align: left;
     font: normal bold 14px Arial, sans-serif;
 }
+
+.new_row_menu_container {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+}
+
+.standart_button {
+    width: 130px;
+}

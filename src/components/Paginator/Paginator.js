@@ -17,12 +17,46 @@ export default class Paginator extends React.Component {
     }
 
     renderButtons() {
-        const {pageQuantity, onSelectedPage} = this.props;
-        let buttonsArray = [];
-        for (let i = 0; i < pageQuantity; i++) {
-            buttonsArray.push(<button className={'page_button'} key={`ButtonId${i}`} onClick={onSelectedPage}>{i + 1}</button>);
+        const {pageQuantity, onSelectedPage, selectedPage} = this.props;
+        if (selectedPage >= 5 && selectedPage <= pageQuantity - 4) {
+            return (
+                <span>
+                    <button className={'page_button'} onClick={onSelectedPage}>1</button>
+                    <span>...</span>
+                    <button className={'page_button'} onClick={onSelectedPage}>{selectedPage - 2}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{selectedPage - 1}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{selectedPage}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{selectedPage + 1}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{selectedPage + 2}</button>
+                    <span>...</span>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity}</button>
+                </span>
+            );
+        } else if (selectedPage > 5 && selectedPage >= pageQuantity - 4) {
+            return (
+                <span>
+                    <button className={'page_button'} onClick={onSelectedPage}>1</button>
+                    <span>...</span>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity - 4}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity - 3}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity - 2}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity - 1}</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity}</button>
+                </span>
+            );
+        } else if (selectedPage <= 5 && selectedPage < pageQuantity - 4) {
+            return (
+                <span>
+                    <button className={'page_button'} onClick={onSelectedPage}>1</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>2</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>3</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>4</button>
+                    <button className={'page_button'} onClick={onSelectedPage}>5</button>
+                    <span>...</span>
+                    <button className={'page_button'} onClick={onSelectedPage}>{pageQuantity}</button>
+                </span>
+            );
         }
-        return buttonsArray;
     }
 
     render() {

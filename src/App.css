@@ -4,6 +4,12 @@
   text-align: center;
 }
 
+.header_menu_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .sk-circle {
   margin: 100px auto;
   width: 40px;

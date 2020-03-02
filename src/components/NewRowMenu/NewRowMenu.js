@@ -49,7 +49,7 @@ export default class NewRowMenu extends React.Component {
         const {id, firstName, lastName, email, phone} = this.state.inputsData;
         return (
             <div className={'new_row_menu_container'}>
-                <button onClick={this.onShowMenuClickHandler}>Add new line</button>
+                <button onClick={this.onShowMenuClickHandler} className={'standart_button'}>Add new line</button>
                 <div className={'inputs_container'}>
                     <span className={'field_name'}>ID:</span>
                     <input type="text" name="id" onChange={this.handleChange} value={id}/><br/>
