@@ -2,6 +2,9 @@ import React from 'react';
 import Cell from '../Cell/Cell';
 import './Row.css';
 
+const ASCEND_SYMBOL = 8593;
+const DESCEND_SYMBOL = 8595;
+
 export default class Row extends React.Component {
     constructor(props) {
         super(props);
@@ -21,13 +24,15 @@ export default class Row extends React.Component {
     }
 
     renderHeader() {
+        const {sortedBy, onClickHeaderCellHandler} = this.props;
+        const sortingDirection = sortedBy.ascend ? String.fromCharCode(ASCEND_SYMBOL) : String.fromCharCode(DESCEND_SYMBOL);
         return (
             <div className='row_container'>
-                <Cell cellType = 'id' isHeader={true} content='id'></Cell>
-                <Cell cellType = 'firstName' isHeader={true} content='firstName'></Cell>
-                <Cell cellType = 'lastName' isHeader={true} content='lastName'></Cell>
-                <Cell cellType = 'email' isHeader={true} content='email'></Cell>
-                <Cell cellType = 'phone' isHeader={true} content='phone'></Cell>
+                <Cell onClickHeaderCellHandler={onClickHeaderCellHandler} headerCellName = 'id' isHeader={true} content={sortedBy.column === 'id' ? 'id ' + sortingDirection : 'id'}></Cell>
+                <Cell onClickHeaderCellHandler={onClickHeaderCellHandler} headerCellName = 'firstName' isHeader={true} content={sortedBy.column === 'firstName' ? 'firstName ' + sortingDirection : 'firstName'}></Cell>
+                <Cell onClickHeaderCellHandler={onClickHeaderCellHandler} headerCellName = 'lastName' isHeader={true} content={sortedBy.column === 'lastName' ? 'lastName ' + sortingDirection : 'lastName'}></Cell>
+                <Cell onClickHeaderCellHandler={onClickHeaderCellHandler} headerCellName = 'email' isHeader={true} content={sortedBy.column === 'email' ? 'email ' + sortingDirection : 'email'}></Cell>
+                <Cell onClickHeaderCellHandler={onClickHeaderCellHandler} headerCellName = 'phone' isHeader={true} content={sortedBy.column === 'phone' ? 'phone ' + sortingDirection : 'phone'}></Cell>
             </div>
             )
     }

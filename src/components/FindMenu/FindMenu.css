@@ -1,5 +1,6 @@
 .finder_input_container {
     display: none;
+    margin-top: 15px;
 }
 
 .finder_input_container_visible {
@@ -7,7 +8,7 @@
 }
 
 .finder_field_name {
-    width: 16ch;
+    width: 17ch;
 }
 
 .findmenu_container {

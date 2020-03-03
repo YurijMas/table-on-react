@@ -7,9 +7,9 @@ export default class Cell extends React.Component {
     }
 
     render() {
-        const {content, type, isHeader} = this.props;
+        const {content, isHeader, onClickHeaderCellHandler, headerCellName} = this.props;
         const additionalStyle = isHeader ? 'header' : '';
         const styles = 'cell_container ' + additionalStyle;
-        return <div className={styles}>{content}</div>;
+        return <div onClick={onClickHeaderCellHandler} name={headerCellName} className={styles}>{content}</div>;
     }
 }

@@ -24,10 +24,17 @@ class App extends React.Component {
     this.renderTable = this.renderTable.bind(this);
     this.onNewDataHandler = this.onNewDataHandler.bind(this);
     this.onFindDataHandler = this.onFindDataHandler.bind(this);
+    this.onClickHeaderCellHandler = this.onClickHeaderCellHandler.bind(this);
     this.selectedNewRowHandler = this.selectedNewRowHandler.bind(this);
+    this.sortingHandler = this.sortingHandler.bind(this);
+    this.findData = this.findData.bind(this);
     this.state = {
       isStarted: false,
       isPending: false,
+      sortedBy: {
+        column: null,
+        ascend: true,
+      },
       data: [],
       filteredData: [],
       selectedPage: 1,
@@ -50,7 +57,6 @@ class App extends React.Component {
         json = await newData.json();
     } catch(e) {
         json=[];
-        console.log('ERRROR: ', e);
     }
     this.setState({
       data: json.slice(),
@@ -108,25 +114,91 @@ class App extends React.Component {
     currentData.unshift(newData);
     this.setState({
       data: currentData,
+      filteredData: currentData,
+    });
+  }
+
+  findData(lowerCaseText) {
+    const {filteredData} = this.state;
+    return new Promise(resolve => {
+      const newFilteredData = filteredData.filter(item => {
+        const strKeys = Object.keys(item);
+        return strKeys.some(key => String(item[key]).toLowerCase().includes(lowerCaseText));
+      });
+      resolve(newFilteredData);
     });
   }
 
   onFindDataHandler(text) {
-    const {data} = this.state;
+    const {sortedBy} = this.state;
     const lowerCaseText = text.toLowerCase();
     if (lowerCaseText === '') {
-      this.setState({
-        filteredData: [...data],
-      });
+      this.sortingHandler(sortedBy.column, sortedBy.ascend, true)
+        .then(filteredData => {
+          this.setState({
+            filteredData,
+          });
+        });
       return;
     }
-    const newFilteredData = data.filter(item => {
-      const strKeys = Object.keys(item);
-      return strKeys.some(key => String(item[key]).toLowerCase().includes(lowerCaseText));
+    this.findData(lowerCaseText).then(newFilteredData => {
+      this.setState({
+        filteredData: [...newFilteredData],
+      });
     });
+  }
+
+  sortingHandler(sortingColumn, ascend, reset) {
+    const {filteredData, data} = this.state;
+    return new Promise(resolve => {
+      const filteredDataCopy = reset ? [...data] : [...filteredData];
+      const tmpFilteredData = filteredDataCopy.sort((a, b) => {
+        const aData = a[sortingColumn];
+        const bData = b[sortingColumn];
+        if (sortingColumn === 'id') {
+          return ascend ? aData - bData : bData - aData; 
+        } else {
+          if (aData > bData) {
+            return ascend ? 1 : -1;
+          }
+          if (aData < bData) {
+            return ascend ? -1 : 1;
+          }
+          return 0;
+        }
+      });
+      resolve(tmpFilteredData);
+    });
+  }
+
+  onClickHeaderCellHandler(e) {
+    const name = e.target.getAttribute('name');
+    const {sortedBy} = this.state;
+    let ascend;
+    let column = sortedBy.column;
+    if (name === sortedBy.column) {
+      if (sortedBy.ascend) {
+        ascend = false;
+      } else {
+        column = null;
+        ascend = true;
+      }
+    } else {
+      column = name;
+      ascend = true;
+    }
     this.setState({
-      filteredData: [...newFilteredData],
+      sortedBy: {
+          column,
+          ascend: ascend,
+      },
     });
+    this.sortingHandler(column, ascend)
+        .then(filteredData => {
+          this.setState({
+            filteredData,
+          });
+        });
   }
 
   selectedNewRowHandler(selectedRowIndex) {
@@ -155,7 +227,7 @@ class App extends React.Component {
   }
 
   renderTable() {
-    const {filteredData, visibleRows, selectedRowIndex, selectedPage} = this.state;
+    const {filteredData, visibleRows, selectedRowIndex, selectedPage, sortedBy} = this.state;
     const pageQuantity = Math.ceil(filteredData.length / STRINGS_ON_PAGE);
     return (
       <div className={'table_wrapper'}>
@@ -167,8 +239,10 @@ class App extends React.Component {
             data={filteredData.slice(visibleRows.min, visibleRows.max)} 
             selectedNewRowHandler={this.selectedNewRowHandler} 
             selectedRowIndex={selectedRowIndex}
+            sortedBy={sortedBy}
+            onClickHeaderCellHandler={this.onClickHeaderCellHandler}
         />
-        <div>
+        <div className={'footer_container'}>
               {selectedRowIndex !== null ? <LineInformationContainer data={filteredData[selectedRowIndex]}/> : null}
               <Paginator 
                 pageQuantity={pageQuantity}

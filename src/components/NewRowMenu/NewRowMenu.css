@@ -1,5 +1,6 @@
 .inputs_container {
     display: none;
+    margin-top: 15px;
 }
 
 .inputs_container_visible {
@@ -16,7 +17,7 @@
 .new_row_menu_container {
     display: flex;
     flex-direction: column;
-    align-content: flex-end;
+    align-items: flex-end;
 }
 
 .standart_button {

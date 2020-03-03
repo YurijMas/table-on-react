@@ -9,16 +9,23 @@ export default class Paginator extends React.Component {
             isForwardActive: false,
         }
         this.renderButtons = this.renderButtons.bind(this);
-        this.onChangePageHandler = this.onChangePageHandler.bind(this);
+        this.renderShortButtonList = this.renderShortButtonList.bind(this);
     }
 
-    onChangePageHandler() {
-
+    renderShortButtonList() {
+        const {pageQuantity, onSelectedPage} = this.props;
+        let buttons = [];
+        for (let i = 0; i < pageQuantity; i++) {
+            buttons.push(<button className={'page_button'} key={i} onClick={onSelectedPage}>{i + 1}</button>);
+        }
+        return buttons;
     }
 
     renderButtons() {
         const {pageQuantity, onSelectedPage, selectedPage} = this.props;
-        if (selectedPage >= 5 && selectedPage <= pageQuantity - 4) {
+        if (pageQuantity <= 5) {
+            return this.renderShortButtonList();
+        } else if (selectedPage >= 5 && selectedPage <= pageQuantity - 4) {
             return (
                 <span>
                     <button className={'page_button'} onClick={onSelectedPage}>1</button>
@@ -65,7 +72,7 @@ export default class Paginator extends React.Component {
             <div className={'paginator_container'}>
                 <button onClick={onSelectPrevPage} disabled={selectedPage === 1}>Back</button>
                 {this.renderButtons()}
-                <button onClick={onSelectNextPage} disabled={selectedPage === pageQuantity}>Back</button>
+                <button onClick={onSelectNextPage} disabled={selectedPage === pageQuantity}>Forward</button>
             </div>
         );
     }

@@ -18,4 +18,6 @@
 .header {
     font: normal bold 14px Arial, sans-serif;
     border-top: solid 1px #000;
+    background-color: #708090;
+    color: #FFF;
 }

@@ -6,9 +6,13 @@
 
 .row_container:hover .cell_container {
     cursor: pointer;
-    background-color: aqua;
+    background-color: #C0C0C0;
 }
 
 .selected_row .cell_container {
-    background-color: red;
+    background-color: #00FF7F;
+}
+
+.selected_row:hover .cell_container {
+    background-color: #00FF7F;
 }

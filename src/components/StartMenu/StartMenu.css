@@ -1,0 +1,30 @@
+.start_container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 0.5px #20B2AA;
+    background-color: #20B2AA;
+    border-radius: 25px;
+}
+
+.start_container button {
+    width: 150px;
+    height: 50px;
+    font: normal normal 24px Arial, sans-serif;
+    border: solid 0.5px #00FF7F;
+    background-color: #FFF;
+    border-radius: 25px;
+    outline: none;
+}
+
+.start_container button:hover {
+    color:#FFF;
+    background-color: #00FF7F;
+    cursor: pointer;
+}

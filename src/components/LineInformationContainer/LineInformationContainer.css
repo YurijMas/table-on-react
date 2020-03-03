@@ -1,12 +1,20 @@
 .line_information_container {
+    position: absolute;
     width: 40%;
+    margin-bottom: 30px;
+    left: 0;
 }
 
 .detail_information_row {
     display: flex;
 }
 
+.detail_information_row:nth-child(n+2) {
+    border-top: solid 0.5px #C0C0C0;
+}
+
 .detail_information_cell {
     width: 50%;
+    text-align: left;
     font: normal normal 12px Arial, sans-serif;
 }
